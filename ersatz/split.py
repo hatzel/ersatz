@@ -21,6 +21,7 @@ from .subword import SentencePiece
 
 import logging
 
+MODEL_CACHE = {}
 
 logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
@@ -276,11 +277,15 @@ def split(args):
     else:
         device = torch.device('cpu')
 
-    if args.model not in MODELS:
+    if args.model in MODEL_CACHE:
+        model = MODEL_CACHE[args.model]
+    elif args.model not in MODELS:
         model = EvalModel(args.model)
+        MODEL_CACHE[args.model] = model
     else:
         model_path = get_model_path(args.model)
         model = EvalModel(model_path)
+        MODEL_CACHE[args.model] = model
 
     model.model = model.model.to(device)
     model.device = device
