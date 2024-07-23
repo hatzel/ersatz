@@ -9,7 +9,7 @@ class DummyArgs():
     def __init__(self):
         return
 
-def split(model="default-multilingual",
+def split_text(model="default-multilingual",
           text=None,
           input=None,
           output=None,
